@@ -10,6 +10,7 @@ connectDB()
 
 // Routes
 const appointments = require('./routes/appointments')
+const auth = require('./routes/auth')
 
 const app = express()
 
@@ -23,11 +24,12 @@ if (process.env.NODE_ENV === 'development') {
 
 // Mount routers
 app.use('/api/v1/appointments', appointments)
+app.use('/api/v1/auth', auth)
 
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
-// const server =
+
 app.listen(
   PORT,
   console.log(
@@ -35,9 +37,9 @@ app.listen(
   )
 )
 
-// //Handle unhandled promise rejections
-// process.on('unhandledRejection', (err, promise) => {
-//   console.log(`Error: ${err.message}`)
-//   //Close server and exit process
-//   server.close(() => process.exit(1))
-// })
+//Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+  console.log(`Error: ${err.message}`)
+  //Close server and exit process
+  server.close(() => process.exit(1))
+})
