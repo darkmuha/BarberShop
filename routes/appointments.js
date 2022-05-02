@@ -9,18 +9,19 @@ const {
 
 const Appointment = require('../models/Appointment')
 
-const advancedResults = require('../middleware/advancedResults')
-
 const router = express.Router()
+
+const advancedResults = require('../middleware/advancedResults')
+const { protect, authorize } = require('../middleware/auth')
 
 router
   .route('/')
   .get(advancedResults(Appointment), getAppointments)
-  .post(createAppointment)
+  .post(protect, createAppointment)
 router
   .route('/:id')
-  .get(getAppointment)
-  .put(updateAppointment)
-  .delete(deleteAppointment)
+  .get(advancedResults(Appointment), getAppointment)
+  .put(protect, authorize('staff', 'admin'), updateAppointment)
+  .delete(protect, authorize('staff', 'admin'), deleteAppointment)
 
 module.exports = router

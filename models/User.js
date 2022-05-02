@@ -1,3 +1,4 @@
+const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
@@ -18,6 +19,12 @@ const UserSchema = new mongoose.Schema(
         'Please add a valid email',
       ],
     },
+    // phoneNumber: {
+    //   type: Number,
+    //   required: [true, 'Please add a phone number'],
+    //   unique: true,
+    //   match: [/\d{3}-\d{3}-\d{3}/, 'Please add a valid phone number'],
+    // },
     role: {
       type: String,
       enum: ['customer', 'staff'],
@@ -39,6 +46,10 @@ const UserSchema = new mongoose.Schema(
 
 // Encrypting the password (using bcryptjs)
 UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next()
+  }
+
   // the higher the salt the more secure but the heavier it is (10 is the recommended)
   const salt = await bcrypt.genSalt(10)
 
@@ -56,6 +67,24 @@ UserSchema.methods.getSignedJwtToken = function () {
 // Match user entered password to hashed password in the database using bcrypt compare
 UserSchema.methods.matchPassword = async function (passwordEntered) {
   return await bcrypt.compare(passwordEntered, this.password)
+}
+
+// Generate and hash password token
+UserSchema.methods.getResetPasswordToken = function () {
+  // Generate token using crypto, and chaning it to a hex string
+  const resetToken = crypto.randomBytes(20).toString('hex')
+
+  // Hash token and set to resetPasswordToken field in the model
+  // all this is from the node crypto documentation
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex')
+
+  // Set resetPasswordExpire to 10 min. from now
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000
+
+  return resetToken
 }
 
 module.exports = mongoose.model('User', UserSchema)

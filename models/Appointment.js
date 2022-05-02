@@ -1,15 +1,16 @@
 const mongoose = require('mongoose')
+const User = require('./User')
 
 const AppointmentSchema = new mongoose.Schema(
   {
     user: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: [true, 'Please enter user'],
     },
     staff: {
-      type: String,
-      ref: 'Staff',
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
       required: [true, 'Please enter staff'],
     },
     options: {
