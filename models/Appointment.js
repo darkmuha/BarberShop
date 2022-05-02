@@ -38,11 +38,13 @@ const AppointmentSchema = new mongoose.Schema(
     startTime: {
       type: String,
       required: [true, 'Please enter a start time'],
+      match: [/\d{2}:\d{2}/, 'Please add a valid start time'],
     },
     fullDuration: Number,
     endTime: {
       type: String,
       default: [true, 'Please enter an end time'],
+      match: [/\d{2}:\d{2}/, 'Please add a valid end time'],
     },
     payment: Number,
   },
