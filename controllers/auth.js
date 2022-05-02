@@ -8,13 +8,14 @@ const ErrorResponse = require('../utils/errorResponse')
 // @route     POST /api/v1/auth/register
 // @access    Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password } = req.body
+  const { name, email, password, phonenumber } = req.body
 
   // Create user
   const user = await User.create({
     name,
     email,
     password,
+    phonenumber,
   })
 
   sendTokenResponse(user, 200, res)
@@ -84,6 +85,7 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
   const fieldsToUpdate = {
     name: req.body.name,
     email: req.body.email,
+    phonenumber: req.body.phonenumber,
   }
 
   const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
