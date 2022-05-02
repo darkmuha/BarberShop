@@ -6,6 +6,9 @@ const errorHandler = require('./middleware/error')
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const xss = require('xss-clean')
+const hpp = require('hpp')
+const rateLimit = require('express-rate-limit')
+const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
 
@@ -39,6 +42,20 @@ app.use(helmet())
 
 // Prevents XSS attacks
 app.use(xss())
+
+// Prevents http param pollution
+app.use(hpp())
+
+// Enable CORS
+// communicate with api if we are not using postman
+app.use(cors())
+
+// Rate limiting (how many requests per a specific amount of time)
+const limiter = rateLimit({
+  windowMws: 10 * 60 * 1000, // 10 minutes
+  max: 100,
+})
+app.use(limiter)
 
 // Mount routers
 app.use('/api/v1/appointments', appointments)

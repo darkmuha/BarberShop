@@ -19,12 +19,12 @@ const UserSchema = new mongoose.Schema(
         'Please add a valid email',
       ],
     },
-    // phoneNumber: {
-    //   type: Number,
-    //   required: [true, 'Please add a phone number'],
-    //   unique: true,
-    //   match: [/\d{3}-\d{3}-\d{3}/, 'Please add a valid phone number'],
-    // },
+    phonenumber: {
+      type: String,
+      required: [true, 'Please add a phone number'],
+      unique: true,
+      match: [/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Please add a valid phone number'],
+    },
     role: {
       type: String,
       enum: ['customer', 'staff'],
