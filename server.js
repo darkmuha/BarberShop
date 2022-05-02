@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const errorHandler = require('./middleware/error')
 const connectDB = require('./config/db')
 const cookieParser = require('cookie-parser')
+const mongoSanitize = require('express-mongo-sanitize')
 
 //Connect to database
 connectDB()
@@ -26,6 +27,10 @@ app.use(cookieParser())
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
+
+// Sanitize data
+// it helps against nosql injection
+app.use(mongoSanitize())
 
 // Mount routers
 app.use('/api/v1/appointments', appointments)

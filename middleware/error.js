@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {
-    const message = `Appointment not found`
+    const message = `Resource not found`
     error = new ErrorResponse(message, 404)
   }
 
@@ -22,7 +22,7 @@ const errorHandler = (err, req, res, next) => {
 
   // Mongoose validation error
   // Error messages are made in the model
-  if (err.name === 'ValidationError') {
+  if (err.name === 'Validation Error') {
     const message = Object.values(err.errors).map((val) => val.message)
     error = new ErrorResponse(message, 400)
   }
