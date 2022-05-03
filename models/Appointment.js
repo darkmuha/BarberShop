@@ -43,7 +43,6 @@ const AppointmentSchema = new mongoose.Schema(
     fullDuration: Number,
     endTime: {
       type: String,
-      default: [true, 'Please enter an end time'],
       match: [/\d{2}:\d{2}/, 'Please add a valid end time'],
     },
     payment: Number,
