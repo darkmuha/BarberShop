@@ -54,25 +54,6 @@ exports.createAppointment = asyncHandler(async (req, res, next) => {
 
   const appointment = await Appointment.create(req.body)
 
-  timeInHoursAndMinutes = [
-    floor(
-      appointment.startTime.split(':')[0] * 60 +
-        appointment.startTime.split(':')[1] +
-        appointment.duration / 60
-    ),
-    appointment.startTime.split(':')[0] * 60 +
-      appointment.startTime.split(':')[1] +
-      (appointment.duration % 60),
-  ]
-  req.user.endTime =
-    (timeInHoursAndMinutes[0] < 10
-      ? '0' + timeInHoursAndMinutes[0].toString()
-      : timeInHoursAndMinutes[0].toString()) +
-    ':' +
-    (timeInHoursAndMinutes[1] < 10
-      ? '0' + timeInHoursAndMinutes[1].toString()
-      : timeInHoursAndMinutes[1].toString())
-
   res.status(201).json({
     success: true,
     date: appointment,
