@@ -1,5 +1,6 @@
+const path = require('path')
 const express = require('express')
-const dotenv = require('dotenv').config()
+const dotenv = require('dotenv')
 const colors = require('colors')
 const morgan = require('morgan')
 const errorHandler = require('./middleware/error')
@@ -11,6 +12,9 @@ const rateLimit = require('express-rate-limit')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
+
+// Load env global varibles
+dotenv.config({ path: '.env' })
 
 //Connect to database
 connectDB()
@@ -57,6 +61,9 @@ const limiter = rateLimit({
 })
 app.use(limiter)
 
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')))
+
 // Mount routers
 app.use('/api/v1/appointments', appointments)
 app.use('/api/v1/auth', auth)
@@ -73,9 +80,9 @@ app.listen(
   )
 )
 
-// //Handle unhandled promise rejections
-// process.on('unhandledRejection', (err, promise) => {
-//   console.log(`Error: ${err.message}`)
-//   //Close server and exit process
-//   server.close(() => process.exit(1))
-// })
+//Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+  console.log(`Error: ${err.message}`)
+  // //Close server and exit process
+  // server.close(() => process.exit(1))
+})
