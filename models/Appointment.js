@@ -17,18 +17,18 @@ const AppointmentSchema = new mongoose.Schema(
       type: Array,
       option: {
         type: String,
-        enum: ['Option 1', 'Option 2', 'Option 3'],
-        default: 'Option 1',
+        enum: ['Haircut', 'Beard', 'Face wash', 'Hair dye'],
+        default: 'Haircut',
       },
       price: {
         type: Number,
-        enum: [10, 20, 30],
+        enum: [10, 15, 5, 50],
         defualt: 10,
       },
       duration: {
         type: Number,
-        enum: [15],
-        default: 15,
+        enum: [10, 30],
+        default: 10,
       },
     },
     date: {
