@@ -27,6 +27,7 @@ const AppointmentSchema = new mongoose.Schema(
       },
       duration: {
         type: Number,
+        // 10 for a Haircut, Beard, and Face wash. 30 for Hair dye
         enum: [10, 30],
         default: 10,
       },
